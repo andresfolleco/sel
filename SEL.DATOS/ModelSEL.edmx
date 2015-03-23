@@ -1,0 +1,365 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SELModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="EstadoSEL">
+          <Key>
+            <PropertyRef Name="IdEstadoSEL" />
+          </Key>
+          <Property Name="IdEstadoSEL" Type="numeric" Precision="18" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombreEstadoSEL" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ServicioSEL">
+          <Key>
+            <PropertyRef Name="IdServicioSEL" />
+          </Key>
+          <Property Name="IdServicioSEL" Type="numeric" Precision="18" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FechaHoraServicio" Type="datetime" Nullable="false" />
+          <Property Name="FecharHoraCita" Type="datetime" Nullable="false" />
+          <Property Name="FechaHoraRecojida" Type="datetime" Nullable="false" />
+          <Property Name="Origen" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Destino" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SolicitudSEL">
+          <Key>
+            <PropertyRef Name="IdSolicitudSEL" />
+          </Key>
+          <Property Name="IdSolicitudSEL" Type="numeric" Precision="18" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsuarioSEL" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="IdEstadoSEL" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="FechaHoraSolicitud" Type="datetime" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="FechaHoraConfirmacion" Type="datetime" />
+          <Property Name="FechaHoraCancelacion" Type="datetime" />
+          <Property Name="FechaHoraFinalizacion" Type="datetime" />
+          <Property Name="IdServicioSEL" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UsuarioSEL">
+          <Key>
+            <PropertyRef Name="IdUsuarioSEL" />
+          </Key>
+          <Property Name="IdUsuarioSEL" Type="numeric" Precision="18" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Correo" Type="varchar" MaxLength="320" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Nombres" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Apellidos" Type="varchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_SolicitudSEL_EstadoSEL">
+          <End Role="EstadoSEL" Type="Self.EstadoSEL" Multiplicity="1" />
+          <End Role="SolicitudSEL" Type="Self.SolicitudSEL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EstadoSEL">
+              <PropertyRef Name="IdEstadoSEL" />
+            </Principal>
+            <Dependent Role="SolicitudSEL">
+              <PropertyRef Name="IdEstadoSEL" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SolicitudSEL_ServicioSEL">
+          <End Role="ServicioSEL" Type="Self.ServicioSEL" Multiplicity="1" />
+          <End Role="SolicitudSEL" Type="Self.SolicitudSEL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServicioSEL">
+              <PropertyRef Name="IdServicioSEL" />
+            </Principal>
+            <Dependent Role="SolicitudSEL">
+              <PropertyRef Name="IdServicioSEL" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SolicitudSEL_UsuarioSEL">
+          <End Role="UsuarioSEL" Type="Self.UsuarioSEL" Multiplicity="1" />
+          <End Role="SolicitudSEL" Type="Self.SolicitudSEL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsuarioSEL">
+              <PropertyRef Name="IdUsuarioSEL" />
+            </Principal>
+            <Dependent Role="SolicitudSEL">
+              <PropertyRef Name="IdUsuarioSEL" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="PA_CONSULTAR_SOLICITUDES_SERVICIO_POR_ID_USUARIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuario" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="PA_INICIAR_SESION" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Correo" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PA_SOLICITAR_SERVICIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuario" Type="numeric" Mode="In" />
+          <Parameter Name="FechaServicio" Type="varchar" Mode="In" />
+          <Parameter Name="HoraServicio" Type="varchar" Mode="In" />
+          <Parameter Name="FechaCita" Type="varchar" Mode="In" />
+          <Parameter Name="HoraCita" Type="varchar" Mode="In" />
+          <Parameter Name="FechaRecojida" Type="varchar" Mode="In" />
+          <Parameter Name="HoraRecogida" Type="varchar" Mode="In" />
+          <Parameter Name="Origen" Type="varchar" Mode="In" />
+          <Parameter Name="Destino" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="SELModelStoreContainer">
+          <EntitySet Name="EstadoSEL" EntityType="Self.EstadoSEL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ServicioSEL" EntityType="Self.ServicioSEL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SolicitudSEL" EntityType="Self.SolicitudSEL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UsuarioSEL" EntityType="Self.UsuarioSEL" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_SolicitudSEL_EstadoSEL" Association="Self.FK_SolicitudSEL_EstadoSEL">
+            <End Role="EstadoSEL" EntitySet="EstadoSEL" />
+            <End Role="SolicitudSEL" EntitySet="SolicitudSEL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SolicitudSEL_ServicioSEL" Association="Self.FK_SolicitudSEL_ServicioSEL">
+            <End Role="ServicioSEL" EntitySet="ServicioSEL" />
+            <End Role="SolicitudSEL" EntitySet="SolicitudSEL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SolicitudSEL_UsuarioSEL" Association="Self.FK_SolicitudSEL_UsuarioSEL">
+            <End Role="UsuarioSEL" EntitySet="UsuarioSEL" />
+            <End Role="SolicitudSEL" EntitySet="SolicitudSEL" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SELModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="EstadoSEL">
+          <Key>
+            <PropertyRef Name="IdEstadoSEL" />
+          </Key>
+          <Property Name="IdEstadoSEL" Type="Decimal" Precision="18" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombreEstadoSEL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="SolicitudSEL" Relationship="SELModel.FK_SolicitudSEL_EstadoSEL" FromRole="EstadoSEL" ToRole="SolicitudSEL" />
+        </EntityType>
+        <EntityType Name="ServicioSEL">
+          <Key>
+            <PropertyRef Name="IdServicioSEL" />
+          </Key>
+          <Property Name="IdServicioSEL" Type="Decimal" Precision="18" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FechaHoraServicio" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FecharHoraCita" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FechaHoraRecojida" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Origen" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Destino" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="SolicitudSEL" Relationship="SELModel.FK_SolicitudSEL_ServicioSEL" FromRole="ServicioSEL" ToRole="SolicitudSEL" />
+        </EntityType>
+        <EntityType Name="SolicitudSEL">
+          <Key>
+            <PropertyRef Name="IdSolicitudSEL" />
+          </Key>
+          <Property Name="IdSolicitudSEL" Type="Decimal" Precision="18" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsuarioSEL" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="IdEstadoSEL" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="FechaHoraSolicitud" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FechaHoraConfirmacion" Type="DateTime" Precision="3" />
+          <Property Name="FechaHoraCancelacion" Type="DateTime" Precision="3" />
+          <Property Name="FechaHoraFinalizacion" Type="DateTime" Precision="3" />
+          <Property Name="IdServicioSEL" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <NavigationProperty Name="EstadoSEL" Relationship="SELModel.FK_SolicitudSEL_EstadoSEL" FromRole="SolicitudSEL" ToRole="EstadoSEL" />
+          <NavigationProperty Name="ServicioSEL" Relationship="SELModel.FK_SolicitudSEL_ServicioSEL" FromRole="SolicitudSEL" ToRole="ServicioSEL" />
+          <NavigationProperty Name="UsuarioSEL" Relationship="SELModel.FK_SolicitudSEL_UsuarioSEL" FromRole="SolicitudSEL" ToRole="UsuarioSEL" />
+        </EntityType>
+        <EntityType Name="UsuarioSEL">
+          <Key>
+            <PropertyRef Name="IdUsuarioSEL" />
+          </Key>
+          <Property Name="IdUsuarioSEL" Type="Decimal" Precision="18" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Correo" Type="String" MaxLength="320" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nombres" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Apellidos" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="SolicitudSEL" Relationship="SELModel.FK_SolicitudSEL_UsuarioSEL" FromRole="UsuarioSEL" ToRole="SolicitudSEL" />
+        </EntityType>
+        <EntityContainer Name="SELEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="EstadoSEL" EntityType="Self.EstadoSEL" />
+          <EntitySet Name="ServicioSEL" EntityType="Self.ServicioSEL" />
+          <EntitySet Name="SolicitudSEL" EntityType="Self.SolicitudSEL" />
+          <EntitySet Name="UsuarioSEL" EntityType="Self.UsuarioSEL" />
+          <FunctionImport Name="PA_INICIAR_SESION" ReturnType="Collection(SELModel.PA_INICIAR_SESION_Result)">
+            <Parameter Name="Correo" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+          </FunctionImport>
+          <AssociationSet Name="FK_SolicitudSEL_EstadoSEL" Association="SELModel.FK_SolicitudSEL_EstadoSEL">
+            <End Role="EstadoSEL" EntitySet="EstadoSEL" />
+            <End Role="SolicitudSEL" EntitySet="SolicitudSEL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SolicitudSEL_ServicioSEL" Association="SELModel.FK_SolicitudSEL_ServicioSEL">
+            <End Role="ServicioSEL" EntitySet="ServicioSEL" />
+            <End Role="SolicitudSEL" EntitySet="SolicitudSEL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SolicitudSEL_UsuarioSEL" Association="SELModel.FK_SolicitudSEL_UsuarioSEL">
+            <End Role="UsuarioSEL" EntitySet="UsuarioSEL" />
+            <End Role="SolicitudSEL" EntitySet="SolicitudSEL" />
+          </AssociationSet>
+          <FunctionImport Name="PA_SOLICITAR_SERVICIO">
+            <Parameter Name="IdUsuario" Mode="In" Type="Decimal" />
+            <Parameter Name="FechaServicio" Mode="In" Type="String" />
+            <Parameter Name="HoraServicio" Mode="In" Type="String" />
+            <Parameter Name="FechaCita" Mode="In" Type="String" />
+            <Parameter Name="HoraCita" Mode="In" Type="String" />
+            <Parameter Name="FechaRecojida" Mode="In" Type="String" />
+            <Parameter Name="HoraRecogida" Mode="In" Type="String" />
+            <Parameter Name="Origen" Mode="In" Type="String" />
+            <Parameter Name="Destino" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PA_CONSULTAR_SOLICITUDES_SERVICIO_POR_ID_USUARIO" ReturnType="Collection(SELModel.PA_CONSULTAR_SOLICITUDES_SERVICIO_POR_ID_USUARIO_Result)">
+            <Parameter Name="IdUsuario" Mode="In" Type="Decimal" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="PA_INICIAR_SESION_Result">
+          <Property Type="Decimal" Name="IdUsuarioSEL" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="Correo" Nullable="false" MaxLength="320" />
+          <Property Type="String" Name="Password" Nullable="false" MaxLength="32" />
+          <Property Type="String" Name="Nombres" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="Apellidos" Nullable="false" MaxLength="200" />
+        </ComplexType>
+        <Association Name="FK_SolicitudSEL_EstadoSEL">
+          <End Type="SELModel.EstadoSEL" Role="EstadoSEL" Multiplicity="1" />
+          <End Type="SELModel.SolicitudSEL" Role="SolicitudSEL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EstadoSEL">
+              <PropertyRef Name="IdEstadoSEL" />
+            </Principal>
+            <Dependent Role="SolicitudSEL">
+              <PropertyRef Name="IdEstadoSEL" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SolicitudSEL_ServicioSEL">
+          <End Type="SELModel.ServicioSEL" Role="ServicioSEL" Multiplicity="1" />
+          <End Type="SELModel.SolicitudSEL" Role="SolicitudSEL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServicioSEL">
+              <PropertyRef Name="IdServicioSEL" />
+            </Principal>
+            <Dependent Role="SolicitudSEL">
+              <PropertyRef Name="IdServicioSEL" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SolicitudSEL_UsuarioSEL">
+          <End Type="SELModel.UsuarioSEL" Role="UsuarioSEL" Multiplicity="1" />
+          <End Type="SELModel.SolicitudSEL" Role="SolicitudSEL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsuarioSEL">
+              <PropertyRef Name="IdUsuarioSEL" />
+            </Principal>
+            <Dependent Role="SolicitudSEL">
+              <PropertyRef Name="IdUsuarioSEL" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="PA_CONSULTAR_SOLICITUDES_SERVICIO_POR_ID_USUARIO_Result">
+          <Property Type="String" Name="ESTADO" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="FECHA_SOLICITUD" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="FECHA_CONFIRMACION" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="FECHA_CANCELACION" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="FECHA_FINALIZACION" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="FECHA_SERVICIO" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="FECHA_CITA" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="FECHA_RECOGIDA" Nullable="false" Precision="23" />
+          <Property Type="String" Name="ORIGEN" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="DESTINO" Nullable="false" MaxLength="50" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SELModelStoreContainer" CdmEntityContainer="SELEntities">
+          <EntitySetMapping Name="EstadoSEL">
+            <EntityTypeMapping TypeName="SELModel.EstadoSEL">
+              <MappingFragment StoreEntitySet="EstadoSEL">
+                <ScalarProperty Name="IdEstadoSEL" ColumnName="IdEstadoSEL" />
+                <ScalarProperty Name="NombreEstadoSEL" ColumnName="NombreEstadoSEL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ServicioSEL">
+            <EntityTypeMapping TypeName="SELModel.ServicioSEL">
+              <MappingFragment StoreEntitySet="ServicioSEL">
+                <ScalarProperty Name="IdServicioSEL" ColumnName="IdServicioSEL" />
+                <ScalarProperty Name="FechaHoraServicio" ColumnName="FechaHoraServicio" />
+                <ScalarProperty Name="FecharHoraCita" ColumnName="FecharHoraCita" />
+                <ScalarProperty Name="FechaHoraRecojida" ColumnName="FechaHoraRecojida" />
+                <ScalarProperty Name="Origen" ColumnName="Origen" />
+                <ScalarProperty Name="Destino" ColumnName="Destino" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SolicitudSEL">
+            <EntityTypeMapping TypeName="SELModel.SolicitudSEL">
+              <MappingFragment StoreEntitySet="SolicitudSEL">
+                <ScalarProperty Name="IdSolicitudSEL" ColumnName="IdSolicitudSEL" />
+                <ScalarProperty Name="IdUsuarioSEL" ColumnName="IdUsuarioSEL" />
+                <ScalarProperty Name="IdEstadoSEL" ColumnName="IdEstadoSEL" />
+                <ScalarProperty Name="FechaHoraSolicitud" ColumnName="FechaHoraSolicitud" />
+                <ScalarProperty Name="FechaHoraConfirmacion" ColumnName="FechaHoraConfirmacion" />
+                <ScalarProperty Name="FechaHoraCancelacion" ColumnName="FechaHoraCancelacion" />
+                <ScalarProperty Name="FechaHoraFinalizacion" ColumnName="FechaHoraFinalizacion" />
+                <ScalarProperty Name="IdServicioSEL" ColumnName="IdServicioSEL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UsuarioSEL">
+            <EntityTypeMapping TypeName="SELModel.UsuarioSEL">
+              <MappingFragment StoreEntitySet="UsuarioSEL">
+                <ScalarProperty Name="IdUsuarioSEL" ColumnName="IdUsuarioSEL" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PA_INICIAR_SESION" FunctionName="SELModel.Store.PA_INICIAR_SESION">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SELModel.PA_INICIAR_SESION_Result">
+                <ScalarProperty Name="IdUsuarioSEL" ColumnName="IdUsuarioSEL" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PA_SOLICITAR_SERVICIO" FunctionName="SELModel.Store.PA_SOLICITAR_SERVICIO" />
+          <FunctionImportMapping FunctionImportName="PA_CONSULTAR_SOLICITUDES_SERVICIO_POR_ID_USUARIO" FunctionName="SELModel.Store.PA_CONSULTAR_SOLICITUDES_SERVICIO_POR_ID_USUARIO">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SELModel.PA_CONSULTAR_SOLICITUDES_SERVICIO_POR_ID_USUARIO_Result">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="FECHA_SOLICITUD" ColumnName="FECHA_SOLICITUD" />
+                <ScalarProperty Name="FECHA_CONFIRMACION" ColumnName="FECHA_CONFIRMACION" />
+                <ScalarProperty Name="FECHA_CANCELACION" ColumnName="FECHA_CANCELACION" />
+                <ScalarProperty Name="FECHA_FINALIZACION" ColumnName="FECHA_FINALIZACION" />
+                <ScalarProperty Name="FECHA_SERVICIO" ColumnName="FECHA_SERVICIO" />
+                <ScalarProperty Name="FECHA_CITA" ColumnName="FECHA_CITA" />
+                <ScalarProperty Name="FECHA_RECOGIDA" ColumnName="FECHA_RECOGIDA" />
+                <ScalarProperty Name="ORIGEN" ColumnName="ORIGEN" />
+                <ScalarProperty Name="DESTINO" ColumnName="DESTINO" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

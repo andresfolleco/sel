@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "../Shared/_Layout.cshtml";
+    ViewBag.Title = "Consultar Solicitudes";
+}
+<div class="row">
+    <div class="mainbox col-md-12" style="margin-top:50px">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="panel-title text-center">Consultar Solicitudes</div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-hover">
+                    <tr>
+                        <th class="text-center">ESTADO</th>
+                        <th class="text-center">FECHA SOLICITUD</th>
+                        <th class="text-center">FECHA CONFIRMACIÓN</th>
+                        <th class="text-center">FECHA CANCELACIÓN</th>
+                        <th class="text-center">FECHA FINALIZACIÓN</th>
+                        <th class="text-center">FECHA SERVICIO</th>
+                        <th class="text-center">FECHA CITA</th>
+                        <th class="text-center">FECHA RECOGIDA</th>
+                        <th class="text-center">ORIGEN</th>
+                        <th class="text-center">DESTINO</th>
+                    </tr>
+                    @foreach (var s in ViewBag.solicitudes)
+                    {
+                        <tr>
+                            <td>@s.ESTADO</td>
+                            <td>@s.FECHA_SOLICITUD</td>
+                            <td>@s.FECHA_CONFIRMACION</td>
+                            <td>@s.FECHA_CANCELACION</td>
+                            <td>@s.FECHA_FINALIZACION</td>
+                            <td>@s.FECHA_SERVICIO</td>
+                            <td>@s.FECHA_CITA</td>
+                            <td>@s.FECHA_RECOGIDA</td>
+                            <td>@s.ORIGEN</td>
+                            <td>@s.DESTINO</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+﻿@using SEL.Models
+@model IniciarSesionViewModel
+@{
+    ViewBag.Title = "Iniciar Sesión";
+}
+<div class="mainbox col-md-4"></div>
+<div class="mainbox col-md-4">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="panel-title text-center">Iniciar Sesión</div>
+        </div>
+        <div class="panel-body">
+            @if (@ViewBag.Respuesta != null)
+            {
+                <div class="alert alert-danger col-sm-12">@ViewBag.Respuesta</div>
+            }
+            @using (Html.BeginForm("Index", "IniciarSesion", null, FormMethod.Post, new { @class = "form-vertical" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => Model.Email)<br />
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        @Html.TextBoxFor(m => Model.Email, new { @autofocus = "on", @placeholder = "Email", @autocomplete = "off", @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(m => Model.Email, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => Model.Password)<br />
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        @Html.PasswordFor(m => Model.Password, new { @placeholder = "Password", @autocomplete = "off", @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(m => Model.Password, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group text-center">
+                    <input type="submit" value="Entrar" class="btn btn-success" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="mainbox col-md-4"></div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

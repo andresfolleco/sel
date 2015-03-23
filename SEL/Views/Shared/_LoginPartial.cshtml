@@ -1,0 +1,3 @@
+﻿<ul class="nav navbar-nav navbar-right">
+    <li>@Html.ActionLink(@Session["NOMBRES_USUARIO"].ToString() + " [Cerrar Sesión]", "CerrarSesion", "SEL", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+</ul>

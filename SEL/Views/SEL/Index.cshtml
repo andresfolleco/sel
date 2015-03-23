@@ -1,0 +1,112 @@
+﻿@using SEL.Models
+@model CrearSolicitudViewModel
+@{
+    Layout = "../Shared/_Layout.cshtml";
+    ViewBag.Title = "Crear Solicitud";
+}
+<div class="row">
+    <div class="mainbox col-md-4"></div>
+    <div class="mainbox col-md-4" style="margin-top:50px">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="panel-title text-center">Crear Solicitud</div>
+            </div>
+            <div class="panel-body">
+                @if (@ViewBag.RespuestaCorrecta != null)
+                {
+                    <div class="alert alert-success col-sm-12">@ViewBag.RespuestaCorrecta</div>
+                }
+                @using (Html.BeginForm("CrearSolicitud", "SEL", null, FormMethod.Post, new { @class = "form-vertical" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        <label>Usuario</label><br />
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input class="form-control" readonly value="@Session["NOMBRES_USUARIO"]" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Servicio</label><br />
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            @Html.TextBoxFor(m => Model.FechaServicio, new { @autofocus = "on", @type = "date", @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(m => Model.FechaServicio, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Servicio</label><br />
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                            @Html.TextBoxFor(m => Model.HoraServicio, new { @type = "time", @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(m => Model.HoraServicio, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Cita</label><br />
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            @Html.TextBoxFor(m => Model.FechaCita, new { @type = "date", @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(m => Model.FechaCita, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Cita</label><br />
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                            @Html.TextBoxFor(m => Model.HoraCita, new { @type = "time", @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(m => Model.HoraCita, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Recojida</label><br />
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            @Html.TextBoxFor(m => Model.FechaRecojida, new { @type = "date", @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(m => Model.FechaRecojida, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Recojida</label><br />
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                            @Html.TextBoxFor(m => Model.HoraRecogida, new { @type = "time", @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(m => Model.HoraRecogida, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label>Origen</label><br />
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                            <select name="Origen" class="form-control">
+                                <option selected>Origen A</option>
+                                <option>Origen B</option>
+                            </select>
+                        </div>
+                        @Html.ValidationMessageFor(m => Model.Origen, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label>Destino</label><br />
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                            <select name="Destino" class="form-control">
+                                <option selected>Origen C</option>
+                                <option>Origen D</option>
+                            </select>
+                        </div>
+                        @Html.ValidationMessageFor(m => Model.Destino, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group text-center">
+                        <input type="submit" value="Solicitar" class="btn btn-success" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="mainbox col-md-4"></div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
